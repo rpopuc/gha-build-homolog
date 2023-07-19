@@ -1,0 +1,6 @@
+services:
+- type: web
+  name: app
+  env: docker
+  plan: standard
+  autoDeploy: false
