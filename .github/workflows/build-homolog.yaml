@@ -69,7 +69,7 @@ jobs:
             lista_branches=`echo -e "$lista_branches\n${{ matrix.branch_name }}"`
           fi
           nova_lista=$lista_branches
-          echo $lista_branches | while read -r branch; do
+          while read -r branch; do
             git checkout $branch
             set +e
             git log --pretty=format:"%h" develop | grep `git log --pretty=format:"%h" -1 $branch` &> /dev/null
@@ -77,7 +77,7 @@ jobs:
               set -e
               nova_lista="${nova_lista//$branch/}"
               echo "Branch $branch removida de homolog"
-              echo "Lista atualiza: $nova_lista"
+              echo "Lista atualizada: $nova_lista"
             else
               echo "Branch $branch mantida em homolog"
               set -e
@@ -88,6 +88,7 @@ jobs:
           done <<< "$lista_branches"
           echo "Preparando homolog"
           git checkout homolog
+          echo "Atualização da lista: $nova_lista"
           echo $nova_lista | tr ' ' '\n' > homolog-branches
           echo "Atualizando lista"
           git add .
