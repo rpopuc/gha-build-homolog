@@ -76,6 +76,7 @@ jobs:
               set -e
               lista_branches="${lista_branches//$branch/}"
               echo "Branch $branch removida de homolog"
+              echo "Lista atualiza: $lista_branches"
             else
               echo "Branch $branch mantida em homolog"
               set -e
