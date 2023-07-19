@@ -76,10 +76,7 @@ jobs:
             if [ $? -eq 0 ]; then
               set -e
               nova_lista="${nova_lista//$branch/}"
-              echo "DEBUG: Branch $branch removida de homolog"
-              echo "DEBUG: Lista atualizada: $nova_lista"
             else
-              echo "DEBUG: Branch $branch mantida em homolog"
               set -e
               git rebase develop
               git checkout homolog
@@ -88,7 +85,6 @@ jobs:
           done <<< "$lista_branches"
           echo "Preparando homolog"
           git checkout homolog
-          echo "DEBUG: Atualização da lista: $nova_lista"
           echo $nova_lista | tr ' ' '\n' > homolog-branches
           echo "Atualizando lista"
           git add .
