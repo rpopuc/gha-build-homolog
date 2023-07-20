@@ -1,4 +1,4 @@
-name: Build homolog
+name: Build debug
 
 on:
   issues:
@@ -12,6 +12,8 @@ jobs:
     if: contains(github.event.issue.labels.*.name, 'build-debug')
     name: Setup
     runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.branches.outputs.values }}
     steps:
       - name: Get action link
         uses: peter-evans/create-or-update-comment@v2
@@ -35,7 +37,6 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
   merge-branch:
-    if: contains(github.event.issue.labels.*.name, 'build-homolog')
     name: Build Homolog
     needs: [ setup ]
     runs-on: ubuntu-latest
@@ -55,8 +56,7 @@ jobs:
           if [[ -f homolog-branches ]]; then
             lista_branches=$(cat homolog-branches)
           fi;
-
-          NOVAS_BRANCHES="${{ needs.setup.outputs.branches }}"
+          lista_branches=`echo -e "$lista_branches\n${{ needs.setup.outputs.branches }}" | tr ' ' '\n' | sort -u`
           while read -r branch; do
-            echo "DEBUG: $branch"
-          done <<< "$NOVAS_BRANCHES"
+            echo "DEBUG: Processar [$branch]"
+          done <<< "$lista_branches"

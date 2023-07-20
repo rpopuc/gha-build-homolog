@@ -13,4 +13,7 @@ Realiza deploy automatizado da aplicação.
 environment_1
 
 ## Branches
+uma
+outra
 {branch}
+e_mais_uma

@@ -1,7 +1,7 @@
 #!/bin/bash
 branch=$1
 template=`cat .github/ISSUE_TEMPLATE/deploy_homolog.md`
-template="${template/\{branch\}/feature}"
+template="${template/\{branch\}/$branch}"
 body=$(echo "$template" | awk '/## Description/ {p=1} p')
 
-gh issue create --title "Automatico" -l build-homolog -F - <<< $body
+gh issue create --title "Automatico" -l build-debug -F - <<< $body
