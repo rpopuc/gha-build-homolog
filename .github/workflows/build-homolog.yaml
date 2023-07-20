@@ -82,6 +82,10 @@ jobs:
               git merge $branch --no-edit
             else
               set -e
+              if [ $branch_exists -neq 0 ]; then
+                echo "DEBUG: Branch $branch não existe!!"
+                exit 1
+              fi
               nova_lista="${nova_lista//$branch/}"
             fi
           done <<< "$lista_branches"
