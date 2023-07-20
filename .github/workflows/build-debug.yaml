@@ -1,0 +1,62 @@
+name: Build homolog
+
+on:
+  issues:
+    types: opened
+
+concurrency:
+  group: build-debug
+
+jobs:
+  setup:
+    if: contains(github.event.issue.labels.*.name, 'build-debug')
+    name: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get action link
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Action link [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+      - name: Checkout do repositório
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Obtém a branch a ser mergeada
+        id: branches
+        run: |
+          values=`python3 .github/support/deploy-debug.py "parse-branches" "${{ github.event.issue.body }}"`
+          echo $values
+          echo "values<<EOF" >> $GITHUB_OUTPUT
+          echo "$values" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  merge-branch:
+    if: contains(github.event.issue.labels.*.name, 'build-homolog')
+    name: Build Homolog
+    needs: [ setup ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Debuga a parada
+        run: |
+          git config --global user.email "robot@github.com"
+          git config --global user.name "Homolog Robot"
+          git fetch --all
+          git checkout homolog
+          lista_branches=''
+          if [[ -f homolog-branches ]]; then
+            lista_branches=$(cat homolog-branches)
+          fi;
+
+          NOVAS_BRANCHES="${{ needs.setup.outputs.branches }}"
+          while read -r branch; do
+            echo "DEBUG: $branch"
+          done <<< "$NOVAS_BRANCHES"
