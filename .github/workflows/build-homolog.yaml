@@ -41,11 +41,6 @@ jobs:
     name: Build Homolog
     needs: [ setup ]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch_name: ${{ fromJSON( needs.setup.outputs.branches ) }}
-      fail-fast: true
-      max-parallel: 1
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v2
@@ -62,12 +57,10 @@ jobs:
           if [[ -f homolog-branches ]]; then
             lista_branches=$(cat homolog-branches)
           fi;
+          lista_branches=`echo -e "$lista_branches\n${{ needs.setup.outputs.branches }}" | tr ' ' '\n' | sort -u`
           git checkout develop
           git branch -D homolog
           git checkout -b homolog develop
-          if ! echo "$lista_branches" | grep -qF "${{ matrix.branch_name }}"; then
-            lista_branches=`echo -e "$lista_branches\n${{ matrix.branch_name }}"`
-          fi
           nova_lista=$lista_branches
           echo "DEBUG: Entrando no loop"
           while read -r branch; do
@@ -89,7 +82,6 @@ jobs:
               git merge $branch --no-edit
             else
               set -e
-              # remove branch from list
               nova_lista="${nova_lista//$branch/}"
             fi
           done <<< "$lista_branches"
@@ -100,3 +92,33 @@ jobs:
           git add .
           git commit -m "Atualizando homolog com $nova_lista"
           git push --force origin homolog
+
+  close-issue-with-success:
+    if: success() && !cancelled()
+    name: Close Issue
+    needs: [ merge-branch ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close issue with success
+        uses: peter-evans/close-issue@v2
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment: |
+            ## Finish :rocket:
+            Branches updated: ${{ steps.branches.outputs.values }}
+            Automation completed.
+
+  close-issue-with-error:
+    if: failure() && !cancelled()
+    name: Close Issue
+    needs: [ merge-branch ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close issue with failure
+        uses: peter-evans/close-issue@v2
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment: |
+            ## Error :sob:
+            Automation failed.
+            You can view the error accessing the [action log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).

@@ -21,7 +21,7 @@ try:
     payload = sys.argv[2]
 
     if command == 'parse-branches':
-        print(json.dumps(parseBranches(payload)))
+        print('\n'.join(parseBranches(payload)))
         exit()
 
     print('["invalid-command"]')
