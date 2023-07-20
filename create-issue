@@ -1,20 +1,7 @@
 #!/bin/bash
-# branch=$1
-# command="s/{branch}/$branch/g .github/ISSUE_TEMPLATE/deploy_homolog.md"
-# echo `sed $command`
+branch=$1
+template=`cat .github/ISSUE_TEMPLATE/deploy_homolog.md`
+template="${template/\{branch\}/feature}"
+body=$(echo "$template" | awk '/## Description/ {p=1} p')
 
-# gh issue create --title "Teste automatizado" --body "$body"
-
-sucesso=0
-falha=1
-
-#------
-
-branch_exists=$falha
-branch_merged=$falha
-
-if [ $branch_exists -eq 0 ] && [ $branch_merged -ne 0 ]; then
-    echo "Faz o merge"
-else
-    echo "Retira da lista"
-fi
+gh issue create --title "Automatico" -l build-homolog -F - <<< $body

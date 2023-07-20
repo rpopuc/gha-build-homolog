@@ -13,5 +13,4 @@ Realiza deploy automatizado da aplicação.
 environment_1
 
 ## Branches
-feat/list
-feat/new-list
+{branch}
