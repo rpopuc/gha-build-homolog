@@ -1,0 +1,6 @@
+#!/bin/bash
+branch=$1
+command="s/{branch}/$branch/g .github/ISSUE_TEMPLATE/deploy_homolog.md"
+echo `sed $command`
+
+# gh issue create --title "Teste automatizado" --body "$body"
