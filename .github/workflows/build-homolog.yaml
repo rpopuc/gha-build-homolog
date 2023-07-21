@@ -27,14 +27,27 @@ jobs:
         with:
           fetch-depth: 0
 
+  branches-to-merge:
+    needs: [ setup ]
+    runs-on: ubuntu-latest
+    outputs:
+      branch_list: ${{ steps.list.outputs.value }}
+    steps:
+      - name: Get branches from issue
+        id: list
+        run: |
+          branchList=$(python3 .github/support/deploy-homolog.py "parse-branches" "${{ github.event.issue.body }}")
+          echo "value<<EOF" >> $GITHUB_OUTPUT
+          echo "$branchList" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
   validate-branches:
     if: contains(github.event.issue.labels.*.name, 'build-homolog')
     runs-on: ubuntu-latest
-    needs: [ setup ]
+    needs: [ branches-to-merge ]
     steps:
       - name: Validate branches
         run: |
-          listaBranches=$(python3 .github/support/deploy-homolog.py "parse-branches" "${{ github.event.issue.body }}")
           git config --global user.email "robot@github.com"
           git config --global user.name "Homolog Robot"
           git fetch --all &> /dev/null
@@ -46,38 +59,38 @@ jobs:
               set -e
               exit 1
             fi
-          done <<< "$listaBranches"
+          done <<< "${{ needs.branches-to-merge.outputs.branch_list }}}}"
 
-  build-homolog:
-    if: contains(github.event.issue.labels.*.name, 'build-homolog')
-    name: Build Homolog
-    needs: [ validate-branches ]
-    runs-on: ubuntu-latest
-    outputs:
-      error_message: ${{ steps.update-homolog.outputs.error }}
-      branch_list: ${{ steps.update-homolog.outputs.branch_list }}
-    steps:
-      - name: Atualizar branch homolog
-        id: update-homolog
-        run: |
-          git checkout homolog &> /dev/null
-          currentBranches=`cat homolog-branches`
+  # build-homolog:
+  #   if: contains(github.event.issue.labels.*.name, 'build-homolog')
+  #   name: Build Homolog
+  #   needs: [ validate-branches ]
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     error_message: ${{ steps.update-homolog.outputs.error }}
+  #     branch_list: ${{ steps.update-homolog.outputs.branch_list }}
+  #   steps:
+  #     - name: Atualizar branch homolog
+  #       id: update-homolog
+  #       run: |
+  #         git checkout homolog &> /dev/null
+  #         currentBranches=`cat homolog-branches`
 
-          git checkout main &> /dev/null
-          homologBranches=$(python3 .github/support/deploy-homolog.py "get-branches" "$currentBranches" "${{ github.event.issue.body }}")
+  #         git checkout main &> /dev/null
+  #         homologBranches=$(python3 .github/support/deploy-homolog.py "get-branches" "$currentBranches" "${{ github.event.issue.body }}")
 
-          set +e
-          output=`bash .github/support/deploy-environment.sh "$homologBranches"`
-          result=$?
-          echo "error='$output'" >> $GITHUB_OUTPUT
+  #         set +e
+  #         output=`bash .github/support/deploy-environment.sh "$homologBranches"`
+  #         result=$?
+  #         echo "error='$output'" >> $GITHUB_OUTPUT
 
-          git checkout homolog
-          lista_branches=$(cat homolog-branches)
-          echo "branch_list<<EOF" >> $GITHUB_OUTPUT
-          echo "$lista_branches" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+  #         git checkout homolog
+  #         lista_branches=$(cat homolog-branches)
+  #         echo "branch_list<<EOF" >> $GITHUB_OUTPUT
+  #         echo "$lista_branches" >> $GITHUB_OUTPUT
+  #         echo "EOF" >> $GITHUB_OUTPUT
 
-          exit $result
+  #         exit $result
 
   # close-issue-with-success:
   #   if: success() && !cancelled()
