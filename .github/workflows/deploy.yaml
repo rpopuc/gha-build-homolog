@@ -1,0 +1,14 @@
+name: Deploy
+
+on:
+  workflow_dispatch:  # Permite a ativação manual do workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sleep for 60 seconds
+        run: |
+          echo "Running deploy..."
+          sleep 60
