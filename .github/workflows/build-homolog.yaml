@@ -81,7 +81,11 @@ jobs:
           output=`bash .github/support/deploy-environment.sh "$lista_branches"`
           result=$?
           echo "error='$output'" >> $GITHUB_OUTPUT
-          echo "branch_list='$lista_branches'" >> $GITHUB_OUTPUT
+
+          echo "branch_list<<EOF" >> $GITHUB_OUTPUT
+          echo "$lista_branches" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
           exit $result
 
   close-issue-with-success:
