@@ -43,6 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       error_message: ${{ steps.update-homolog.outputs.error }}
+      wellcome_message: ${{ steps.update-homolog.outputs.welcome }}
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v2
@@ -52,6 +53,7 @@ jobs:
       - name: Atualizar branch homolog
         id: update-homolog
         run: |
+          echo "welcome='Seja bem vindo'" >> $GITHUB_OUTPUT
           git config --global user.email "robot@github.com"
           git config --global user.name "Homolog Robot"
           git fetch --all
@@ -65,7 +67,7 @@ jobs:
             set +e
             git ls-remote --exit-code --heads origin $branch &> /dev/null
             if [[ "$?" != "0" ]]; then
-              echo "error=Branch não existe: $branch" >> $GITHUB_OUTPUT
+              echo "error='Branch não existe: $branch'" >> $GITHUB_OUTPUT
               set -e
               exit 1
             fi
