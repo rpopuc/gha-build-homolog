@@ -1,4 +1,4 @@
-name: Verify concurrence
+name: Manual
 
 on:
   workflow_dispatch:  # Permite a ativação manual do workflow
@@ -17,5 +17,6 @@ jobs:
           exit 1
 
       - name: Report
+        if: failure()
         run: |
           gh run view ${{ github.run_id }} --log | grep error
