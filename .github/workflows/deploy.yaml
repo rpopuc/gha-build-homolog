@@ -11,4 +11,4 @@ jobs:
       - name: Sleep for 60 seconds
         run: |
           echo "Running deploy..."
-          sleep 60
+          sleep 120
