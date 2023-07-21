@@ -39,6 +39,9 @@ def getBranches(currentList, mergeList):
         if branch in currentList:
             currentList.remove(branch)
 
+    # remove duplicates
+    currentList = list(dict.fromkeys(currentList))
+
     return currentList
 
 try:
@@ -55,5 +58,4 @@ try:
     print('["invalid-command"]')
 
 except IndexError as error:
-    print(error)
     print('["error"]')

@@ -119,6 +119,19 @@ jobs:
 
           exit $result
 
+      - name: Close issue with failure
+        uses: peter-evans/close-issue@v2
+        if: failure() && !cancelled()
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment: |
+            ## Automation failed. :sob:
+
+            Errors ocurred during automation:
+            - ${{ steps.update-homolog.outputs.error }}
+
+            You can view all logs acessing [action log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+
   close-issue-with-success:
     if: success() && !cancelled()
     name: Close Issue
@@ -134,6 +147,7 @@ jobs:
 
             Branches in homolog
             - ${{ needs.build.outputs.branch_list }}
+
 
   # close-issue-with-error:
   #   if: failure() && !cancelled()
