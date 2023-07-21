@@ -70,7 +70,7 @@ jobs:
             fi
           done <<< "${{ needs.branches-to-merge.outputs.branch_list }}"
 
-  build-homolog:
+  build:
     if: contains(github.event.issue.labels.*.name, 'build-homolog')
     name: Build Homolog
     needs: [ validate-branches ]
@@ -109,7 +109,7 @@ jobs:
   close-issue-with-success:
     if: success() && !cancelled()
     name: Close Issue
-    needs: [ merge-branch ]
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
       - name: Close issue with success
@@ -120,7 +120,7 @@ jobs:
             ## Update completed :rocket:
 
             Branches in homolog
-            - ${{ needs.build-homolog.outputs.branch_list }}
+            - ${{ needs.build.outputs.branch_list }}
 
   # close-issue-with-error:
   #   if: failure() && !cancelled()
