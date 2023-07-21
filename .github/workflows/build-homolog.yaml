@@ -70,36 +70,36 @@ jobs:
             fi
           done <<< "${{ needs.branches-to-merge.outputs.branch_list }}"
 
-  # build-homolog:
-  #   if: contains(github.event.issue.labels.*.name, 'build-homolog')
-  #   name: Build Homolog
-  #   needs: [ validate-branches ]
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     error_message: ${{ steps.update-homolog.outputs.error }}
-  #     branch_list: ${{ steps.update-homolog.outputs.branch_list }}
-  #   steps:
-  #     - name: Atualizar branch homolog
-  #       id: update-homolog
-  #       run: |
-  #         git checkout homolog &> /dev/null
-  #         currentBranches=`cat homolog-branches`
+  build-homolog:
+    if: contains(github.event.issue.labels.*.name, 'build-homolog')
+    name: Build Homolog
+    needs: [ validate-branches ]
+    runs-on: ubuntu-latest
+    outputs:
+      error_message: ${{ steps.update-homolog.outputs.error }}
+      branch_list: ${{ steps.update-homolog.outputs.branch_list }}
+    steps:
+      - name: Update homolog branch
+        id: update-homolog
+        run: |
+          git checkout homolog &> /dev/null
+          currentBranches=`cat homolog-branches`
 
-  #         git checkout main &> /dev/null
-  #         homologBranches=$(python3 .github/support/deploy-homolog.py "get-branches" "$currentBranches" "${{ github.event.issue.body }}")
+          git checkout main &> /dev/null
+          homologBranches=$(python3 .github/support/deploy-homolog.py "get-branches" "$currentBranches" "${{ github.event.issue.body }}")
 
-  #         set +e
-  #         output=`bash .github/support/deploy-environment.sh "$homologBranches"`
-  #         result=$?
-  #         echo "error='$output'" >> $GITHUB_OUTPUT
+          set +e
+          output=`bash .github/support/deploy-environment.sh "$homologBranches"`
+          result=$?
+          echo "error='$output'" >> $GITHUB_OUTPUT
 
-  #         git checkout homolog
-  #         lista_branches=$(cat homolog-branches)
-  #         echo "branch_list<<EOF" >> $GITHUB_OUTPUT
-  #         echo "$lista_branches" >> $GITHUB_OUTPUT
-  #         echo "EOF" >> $GITHUB_OUTPUT
+          git checkout homolog
+          lista_branches=$(cat homolog-branches)
+          echo "branch_list<<EOF" >> $GITHUB_OUTPUT
+          echo "$lista_branches" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-  #         exit $result
+          exit $result
 
   # close-issue-with-success:
   #   if: success() && !cancelled()

@@ -13,7 +13,4 @@ Realiza deploy automatizado da aplicação.
 environment_1
 
 ## Branches
-_DELETE_ feat/homolog
-feat/util
-_DELETE_ feat/home
-_DELETE_ feat/list
+feat/outro
