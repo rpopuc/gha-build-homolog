@@ -53,8 +53,31 @@ jobs:
       - name: Atualizar branch homolog
         id: update-homolog
         run: |
+          # Valida lista de entrega de branches
+          git config --global user.email "robot@github.com"
+          git config --global user.name "Homolog Robot"
+          git fetch --all &> /dev/null
+          while read -r branch; do
+            set +e
+            git ls-remote --exit-code --heads origin $branch &> /dev/null
+            if [[ "$?" != "0" ]]; then
+              echo "error=Branch não existe: '$branch'" >> $GITHUB_OUTPUT
+              set -e
+              exit 1
+            fi
+          done <<< "${{ needs.setup.outputs.branches }}"
+
+          # Mescla lista de entrada com branches de homolog
+          git checkout homolog &> /dev/null
+          lista_branches=''
+          if [[ -f homolog-branches ]]; then
+            lista_branches=$(cat homolog-branches)
+          fi;
+          lista_branches=`echo -e "$lista_branches\n${{ needs.setup.outputs.branches }}" | tr ' ' '\n' | sort -u`
+
+          # Processa novo homolog
           set +e
-          output=`bash .github/support/deploy-environment.sh "${{ needs.setup.outputs.branches }}"`
+          output=`bash .github/support/deploy-environment.sh "$lista_branches"`
           result=$?
           echo "error=$output" >> $GITHUB_OUTPUT
           exit $result

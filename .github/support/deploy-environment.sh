@@ -1,23 +1,5 @@
 #!/bin/bash
-inputBranches=$1
-git config --global user.email "robot@github.com"
-git config --global user.name "Homolog Robot"
-git fetch --all &> /dev/null
-git checkout homolog &> /dev/null
-lista_branches=''
-if [[ -f homolog-branches ]]; then
-  lista_branches=$(cat homolog-branches)
-fi;
-while read -r branch; do
-  set +e
-  git ls-remote --exit-code --heads origin $branch &> /dev/null
-  if [[ "$?" != "0" ]]; then
-    echo "Branch não existe: '$branch'"
-    set -e
-    exit 1
-  fi
-done <<< "$inputBranches"
-lista_branches=`echo -e "$lista_branches\n$inputBranches" | tr ' ' '\n' | sort -u`
+$lista_branches=$1
 git checkout develop
 git branch -D homolog
 git checkout -b homolog develop
