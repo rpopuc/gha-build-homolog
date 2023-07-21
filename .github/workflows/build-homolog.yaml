@@ -25,6 +25,7 @@ jobs:
   branches-to-merge:
     needs: [ setup ]
     runs-on: ubuntu-latest
+    name: Get branches to merge
     outputs:
       branch_list: ${{ steps.list.outputs.value }}
     steps:
@@ -44,6 +45,7 @@ jobs:
   validate-branches:
     if: contains(github.event.issue.labels.*.name, 'build-homolog')
     runs-on: ubuntu-latest
+    name: Validate branches to merge
     needs: [ branches-to-merge ]
     steps:
       - name: Validate branches
@@ -60,7 +62,7 @@ jobs:
               set -e
               exit 1
             fi
-          done <<< "${{ needs.branches-to-merge.outputs.branch_list }}}}"
+          done <<< "${{ needs.branches-to-merge.outputs.branch_list }}"
 
   # build-homolog:
   #   if: contains(github.event.issue.labels.*.name, 'build-homolog')
