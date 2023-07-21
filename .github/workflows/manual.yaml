@@ -7,26 +7,25 @@ concurrency:
   group: verify-concurrence
 
 jobs:
-  run:
+  main:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Gerar erro
+      - name: Passo principal
         id: main
         run: |
-          erro="Deu erro aqui. Não sei o motivo."
-          echo $erro
-          echo "error=${erro}" >> $GITHUB_OUTPUT
+          echo "error=Uma mensagem de erro" >> $GITHUB_OUTPUT
           exit 1
 
-      - name: Report by output
+      - name: Relatório final
         if: failure()
         run: |
-          echo "ERROS: ${{ steps.main.outputs.error }}"
+          echo "Ocorreram erros!"
+          echo "- ${{ steps.main.outputs.error }}"
 
-      - name: Report
-        if: failure()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh run view ${{ github.run_id }} --log | grep error
+      # - name: Report
+      #   if: failure()
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     gh run view ${{ github.run_id }} --log | grep error
