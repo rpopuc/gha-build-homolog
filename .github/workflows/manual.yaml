@@ -11,7 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Sleep...
+      - name: Gerar erro
         run: |
-          echo "Running deploy..."
-          sleep 120
+          echo "Deu erro aqui. Não sei o motivo."
+          exit 1
+
+      - name: Report
+        run: |
+          gh run view ${{ github.run_id }} --log | grep error
