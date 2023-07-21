@@ -30,7 +30,7 @@ jobs:
       branch_list: ${{ steps.list.outputs.value }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -50,7 +50,7 @@ jobs:
     needs: [ branches-to-merge ]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -93,7 +93,7 @@ jobs:
       branch_list: ${{ steps.update-homolog.outputs.branch_list }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
