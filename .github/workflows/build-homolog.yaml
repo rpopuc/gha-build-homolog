@@ -67,7 +67,7 @@ jobs:
             set +e
             git ls-remote --exit-code --heads origin $branch &> /dev/null
             if [[ "$?" != "0" ]]; then
-              echo "error='Branch não existe: $branch'" >> $GITHUB_OUTPUT
+              echo "error=Branch não existe: $branch" >> $GITHUB_OUTPUT
               set -e
               exit 1
             fi
@@ -148,11 +148,10 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           comment: |
-            ## Error :sob:
-            Automation failed.
-            Errors:
+            ## Automation failed. :sob:
+
+            Errors ocurred during automation:
             - ${{ needs.merge-branch.outputs.error_messsage }}
 
-            ----
             You can view all logs acessing [action log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
