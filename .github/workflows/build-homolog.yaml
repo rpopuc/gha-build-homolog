@@ -79,6 +79,11 @@ jobs:
       error_message: ${{ steps.update-homolog.outputs.error }}
       branch_list: ${{ steps.update-homolog.outputs.branch_list }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Update homolog branch
         id: update-homolog
         run: |
