@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       error_message: ${{ steps.update-homolog.outputs.error }}
-      wellcome_message: ${{ steps.update-homolog.outputs.welcome }}
+      branch_list: ${{ steps.update-homolog.outputs.branch_list }}
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v2
@@ -80,7 +80,8 @@ jobs:
           set +e
           output=`bash .github/support/deploy-environment.sh "$lista_branches"`
           result=$?
-          echo "error=$output" >> $GITHUB_OUTPUT
+          echo "error='$output'" >> $GITHUB_OUTPUT
+          echo "branch_list='$lista_branches'" >> $GITHUB_OUTPUT
           exit $result
 
   close-issue-with-success:
@@ -94,9 +95,10 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           comment: |
-            ## Finish :rocket:
-            Branches updated: ${{ steps.branches.outputs.values }}
-            Automation completed.
+            ## Update completed :rocket:
+
+            Branches in homolog
+            - ${{ needs.merge-branch.outputs.branch_list }}
 
   close-issue-with-error:
     if: failure() && !cancelled()
