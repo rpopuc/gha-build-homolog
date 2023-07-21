@@ -41,6 +41,8 @@ jobs:
     name: Build Homolog
     needs: [ setup ]
     runs-on: ubuntu-latest
+    outputs:
+      error_message: ${{ steps.update-homolog.outputs.error }}
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v2
@@ -64,7 +66,6 @@ jobs:
             git ls-remote --exit-code --heads origin $branch &> /dev/null
             if [[ "$?" != "0" ]]; then
               echo "error=Branch não existe: $branch" >> $GITHUB_OUTPUT
-              echo "Branch não existe: $branch"
               set -e
               exit 1
             fi
@@ -138,7 +139,8 @@ jobs:
             ## Error :sob:
             Automation failed.
             Errors:
-            - ${{ needs.merge-branch.steps.update-homolog.outputs.error }}
+            - ${{ needs.merge-branch.outputs.error_messsage }}
+
             ----
             You can view all logs acessing [action log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
