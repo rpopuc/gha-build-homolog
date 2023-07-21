@@ -49,6 +49,11 @@ jobs:
     name: Validate branches to merge
     needs: [ branches-to-merge ]
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Validate branches
         run: |
           git config --global user.email "robot@github.com"
