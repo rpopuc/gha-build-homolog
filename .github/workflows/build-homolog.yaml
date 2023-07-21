@@ -58,7 +58,15 @@ jobs:
             lista_branches=$(cat homolog-branches)
           fi;
 
-          # Validar
+          while read -r branch; do
+            set +e
+            git ls-remote --exit-code --heads origin $branch &> /dev/null
+            if [ $? -neq 0 ]; then
+              echo "Branch não existe: $branch"
+              set -e
+              exit 1
+            fi
+          done <<< "${{ needs.setup.outputs.branches }}"
 
           lista_branches=`echo -e "$lista_branches\n${{ needs.setup.outputs.branches }}" | tr ' ' '\n' | sort -u`
           git checkout develop
