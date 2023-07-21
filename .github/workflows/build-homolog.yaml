@@ -55,6 +55,7 @@ jobs:
             set +e
             git ls-remote --exit-code --heads origin $branch &> /dev/null
             if [[ "$?" != "0" ]]; then
+              echo "Branch não existe: '$branch'"
               echo "error=Branch não existe: '$branch'" >> $GITHUB_OUTPUT
               set -e
               exit 1
