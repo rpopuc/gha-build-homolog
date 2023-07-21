@@ -53,64 +53,11 @@ jobs:
       - name: Atualizar branch homolog
         id: update-homolog
         run: |
-          echo "welcome='Seja bem vindo'" >> $GITHUB_OUTPUT
-          git config --global user.email "robot@github.com"
-          git config --global user.name "Homolog Robot"
-          git fetch --all
-          git checkout homolog
-          lista_branches=''
-          if [[ -f homolog-branches ]]; then
-            lista_branches=$(cat homolog-branches)
-          fi;
-
-          while read -r branch; do
-            set +e
-            git ls-remote --exit-code --heads origin $branch &> /dev/null
-            if [[ "$?" != "0" ]]; then
-              echo "error=Branch não existe: '$branch'" >> $GITHUB_OUTPUT
-              set -e
-              exit 1
-            fi
-          done <<< "${{ needs.setup.outputs.branches }}"
-
-          lista_branches=`echo -e "$lista_branches\n${{ needs.setup.outputs.branches }}" | tr ' ' '\n' | sort -u`
-          git checkout develop
-          git branch -D homolog
-          git checkout -b homolog develop
-          nova_lista=$lista_branches
-          echo "DEBUG: Entrando no loop"
-          while read -r branch; do
-            set +e
-            echo "DEBUG: Verifica se $branch existe"
-            git ls-remote --exit-code --heads origin $branch &> /dev/null
-            branch_exists=$?
-            echo "DEBUG: Verificou se $branch $branch_exists"
-            branch_merged=0
-            if [[ "$branch_exists" == "0" ]]; then
-              git checkout $branch
-              git log --pretty=format:"%h" develop | grep `git log --pretty=format:"%h" -1 $branch` &> /dev/null
-              branch_merged=$?
-            fi
-            if [[ "$branch_exists" == "0" ]] && [[ "$branch_merged" != "0" ]]; then
-              set -e
-              git rebase develop
-              git checkout homolog
-              git merge $branch --no-edit
-            else
-              set -e
-              if [[ "$branch_exists" != "0" ]]; then
-                echo "DEBUG: Branch $branch não existe!!"
-              fi
-              nova_lista="${nova_lista//$branch/}"
-            fi
-          done <<< "$lista_branches"
-          echo "Preparando homolog"
-          git checkout homolog
-          echo $nova_lista | tr ' ' '\n' > homolog-branches
-          echo "Atualizando lista"
-          git add .
-          git commit -m "Atualizando homolog com $nova_lista"
-          git push --force origin homolog
+          set +e
+          output=`bash .github/support/deploy-homolog.sh "${{ needs.setup.outputs.branches }}"`
+          result=$?
+          echo "error=$output" >> $GITHUB_OUTPUT
+          exit $result
 
   close-issue-with-success:
     if: success() && !cancelled()
