@@ -13,6 +13,9 @@ def parseBranches(payload):
     # Remove empty branches
     branches = list(filter(None, branches))
 
+    # Remove branches that have _DELETE_ in the name
+    branches = [branch for branch in branches if '_DELETE_' not in branch]
+
     # strip whitespaces from each branch
     return [branch.strip() for branch in branches]
 
@@ -45,7 +48,8 @@ try:
     mergeList = sys.argv[3]
 
     if command == 'parse-branches':
-        print('\n'.join(parseBranches(mergeList)))
+        # print('\n'.join(parseBranches(currentList)))
+        print('ok')
         exit()
 
     if command == 'get-branches':
@@ -55,4 +59,5 @@ try:
     print('["invalid-command"]')
 
 except IndexError as error:
+    print(error)
     print('["error"]')
