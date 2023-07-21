@@ -127,6 +127,16 @@ jobs:
             Branches updated: ${{ steps.branches.outputs.values }}
             Automation completed.
 
+  simple-error-report:
+    if: failure() && !cancelled()
+    name: Close Issue
+    needs: [ merge-branch ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show report
+        run: |
+          echo '${{ needs.merge-branch.outputs.error_message }}'
+
   close-issue-with-error:
     if: failure() && !cancelled()
     name: Close Issue
