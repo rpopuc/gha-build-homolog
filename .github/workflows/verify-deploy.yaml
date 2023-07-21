@@ -2,7 +2,7 @@ name: Verify deploy
 
 on:
   pull_request:
-    types: [synchronize, ready_for_review]
+    types: [synchronize, ready_for_review, opened, reopened, edited, labeled, unlabeled]
 
 # on:
 #   workflow_dispatch:  # Permite a ativação manual do workflow
