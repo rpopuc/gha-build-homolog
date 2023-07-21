@@ -16,7 +16,7 @@ jobs:
         run: |
           erro="Deu erro aqui. Não sei o motivo."
           echo $erro
-          echo "erro=${erro}" >> $GITHUB_OUTPUT
+          echo "error=${erro}" >> $GITHUB_OUTPUT
           exit 1
 
       - name: Report by output
