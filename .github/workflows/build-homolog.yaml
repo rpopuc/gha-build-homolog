@@ -151,7 +151,7 @@ jobs:
             ## Automation failed. :sob:
 
             Errors ocurred during automation:
-            - ${{ needs.merge-branch.outputs.error_messsage }}
+            - ${{ needs.merge-branch.outputs.error_message }}
 
             You can view all logs acessing [action log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
