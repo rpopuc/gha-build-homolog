@@ -57,6 +57,9 @@ jobs:
           if [[ -f homolog-branches ]]; then
             lista_branches=$(cat homolog-branches)
           fi;
+
+          # Validar
+
           lista_branches=`echo -e "$lista_branches\n${{ needs.setup.outputs.branches }}" | tr ' ' '\n' | sort -u`
           git checkout develop
           git branch -D homolog
