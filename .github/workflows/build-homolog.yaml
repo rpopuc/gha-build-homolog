@@ -22,17 +22,17 @@ jobs:
           body: |
             Action link [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
-      - name: Checkout do repositório
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
   branches-to-merge:
     needs: [ setup ]
     runs-on: ubuntu-latest
     outputs:
       branch_list: ${{ steps.list.outputs.value }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Get branches from issue
         id: list
         run: |
