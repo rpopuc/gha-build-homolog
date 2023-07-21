@@ -17,8 +17,10 @@ jobs:
 
       - name: Rebase branch
         run: |
+          git checkout homolog
+          lista_branches=$(cat homolog-branches)
           set +e
-          output=`bash .github/support/deploy-environment.sh ""`
+          output=`bash .github/support/deploy-environment.sh "$lista_branches"`
           result=$?
           echo "error=$output" >> $GITHUB_OUTPUT
           exit $result
