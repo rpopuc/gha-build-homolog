@@ -82,6 +82,8 @@ jobs:
           result=$?
           echo "error='$output'" >> $GITHUB_OUTPUT
 
+          git checkout homolog
+          lista_branches=$(cat homolog-branches)
           echo "branch_list<<EOF" >> $GITHUB_OUTPUT
           echo "$lista_branches" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
