@@ -38,6 +38,7 @@ jobs:
         id: list
         run: |
           branchList=$(python3 .github/support/deploy-homolog.py "parse-branches" "${{ github.event.issue.body }}")
+          echo $branchList
           echo "value<<EOF" >> $GITHUB_OUTPUT
           echo "$branchList" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
