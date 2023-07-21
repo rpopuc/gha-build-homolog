@@ -67,7 +67,7 @@ jobs:
             set +e
             git ls-remote --exit-code --heads origin $branch &> /dev/null
             if [[ "$?" != "0" ]]; then
-              echo "error=Branch não existe: $branch" >> $GITHUB_OUTPUT
+              echo "error=Branch não existe: '$branch'" >> $GITHUB_OUTPUT
               set -e
               exit 1
             fi
@@ -135,7 +135,7 @@ jobs:
     steps:
       - name: Show report
         run: |
-          echo '${{ needs.merge-branch.outputs.error_message }}'
+          echo "${{ needs.merge-branch.outputs.error_message }}"
 
   close-issue-with-error:
     if: failure() && !cancelled()
