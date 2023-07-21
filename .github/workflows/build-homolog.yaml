@@ -54,7 +54,7 @@ jobs:
         id: update-homolog
         run: |
           set +e
-          output=`bash .github/support/deploy-homolog.sh "${{ needs.setup.outputs.branches }}"`
+          output=`bash .github/support/deploy-environment.sh "${{ needs.setup.outputs.branches }}"`
           result=$?
           echo "error=$output" >> $GITHUB_OUTPUT
           exit $result
