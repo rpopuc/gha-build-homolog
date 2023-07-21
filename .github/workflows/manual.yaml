@@ -7,21 +7,22 @@ concurrency:
   group: verify-concurrence
 
 jobs:
-  main:
+  principal:
     runs-on: ubuntu-latest
-
+    outputs:
+      erro_job: ${{ steps.tarefa.outputs.mensagem_erro }}
     steps:
       - name: Passo principal
-        id: main
+        id: tarefa
         run: |
-          echo "error=Uma mensagem de erro" >> $GITHUB_OUTPUT
+          echo "mensagem_erro=Uma mensagem de erro" >> $GITHUB_OUTPUT
           exit 1
 
-      - name: Relatório final
-        if: failure()
-        run: |
-          echo "Ocorreram erros!"
-          echo "- ${{ steps.main.outputs.error }}"
+      # - name: Relatório final
+      #   if: failure()
+      #   run: |
+      #     echo "Ocorreram erros!"
+      #     echo "- ${{ steps.main.outputs.error }}"
 
       # - name: Report
       #   if: failure()
@@ -29,3 +30,14 @@ jobs:
       #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   run: |
       #     gh run view ${{ github.run_id }} --log | grep error
+
+  relatorio:
+    runs-on: ubuntu-latest
+    needs: [ principal ]
+    steps:
+      - name: Relatório final
+        if: failure()
+        run: |
+          echo "Ocorreram erros!"
+          echo "- Por step: ${{ needs.principal.steps.tarefa.outputs.mensagem_erro }}"
+          echo "- Por output: ${{ needs.principal.outputs.erro_job }}"
