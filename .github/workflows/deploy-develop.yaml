@@ -17,8 +17,9 @@ jobs:
 
       - name: Rebase branch
         run: |
-          set +e
-          output=`bash .github/support/deploy-environment.sh ""`
-          result=$?
-          echo "error=$output" >> $GITHUB_OUTPUT
-          exit $result
+          echo "Eh... entao tá bom"
+          # set +e
+          # output=`bash .github/support/deploy-environment.sh ""`
+          # result=$?
+          # echo "error=$output" >> $GITHUB_OUTPUT
+          # exit $result
