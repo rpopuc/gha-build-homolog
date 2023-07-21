@@ -1,0 +1,11 @@
+## Description
+Realiza deploy automatizado da aplicação.
+
+## Environments
+environment_1
+
+## Branches
+feat/util
+_DELETE_ feat/homolog
+_DELETE_ feat/home
+_DELETE_ feat/list
