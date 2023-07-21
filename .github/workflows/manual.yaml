@@ -1,0 +1,17 @@
+name: Verify concurrence
+
+on:
+  workflow_dispatch:  # Permite a ativação manual do workflow
+
+concurrency:
+  group: verify-concurrence
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sleep...
+        run: |
+          echo "Running deploy..."
+          sleep 120
