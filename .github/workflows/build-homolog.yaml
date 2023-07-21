@@ -76,6 +76,7 @@ jobs:
           lista_branches=`echo -e "$lista_branches\n${{ needs.setup.outputs.branches }}" | tr ' ' '\n' | sort -u`
 
           # Processa novo homolog
+          git checkout main &> /dev/null
           set +e
           output=`bash .github/support/deploy-environment.sh "$lista_branches"`
           result=$?
@@ -96,16 +97,6 @@ jobs:
             ## Finish :rocket:
             Branches updated: ${{ steps.branches.outputs.values }}
             Automation completed.
-
-  simple-error-report:
-    if: failure() && !cancelled()
-    name: Close Issue
-    needs: [ merge-branch ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Show report
-        run: |
-          echo "${{ needs.merge-branch.outputs.error_message }}"
 
   close-issue-with-error:
     if: failure() && !cancelled()

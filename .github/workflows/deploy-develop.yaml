@@ -15,15 +15,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Config git
-        run: |
-          git config --global user.email "robot@github.com"
-          git config --global user.name "Homolog Robot"
-
       - name: Rebase branch
         run: |
-          git fetch --all
-          git checkout homolog
-          git rebase develop
-          git push --force origin homolog
-
+          set +e
+          output=`bash .github/support/deploy-environment.sh ""`
+          result=$?
+          echo "error=$output" >> $GITHUB_OUTPUT
+          exit $result
