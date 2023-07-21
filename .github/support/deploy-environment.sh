@@ -1,10 +1,9 @@
 #!/bin/bash
 inputBranches=$1
-echo "welcome='Seja bem vindo'" >> $GITHUB_OUTPUT
 git config --global user.email "robot@github.com"
 git config --global user.name "Homolog Robot"
-git fetch --all
-git checkout homolog
+git fetch --all &> /dev/null
+git checkout homolog &> /dev/null
 lista_branches=''
 if [[ -f homolog-branches ]]; then
   lista_branches=$(cat homolog-branches)

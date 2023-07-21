@@ -1,8 +1,11 @@
 name: Build debug
 
+# on:
+#   issues:
+#     types: opened
+
 on:
-  issues:
-    types: opened
+  workflow_dispatch:  # Permite a ativação manual do workflow
 
 concurrency:
   group: build-debug
