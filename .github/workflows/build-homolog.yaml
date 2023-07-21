@@ -70,6 +70,19 @@ jobs:
             fi
           done <<< "${{ needs.branches-to-merge.outputs.branch_list }}"
 
+      - name: Close issue with failure
+        uses: peter-evans/close-issue@v2
+        if: failure() && !cancelled()
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment: |
+            ## Automation failed. :sob:
+
+            Errors ocurred during automation:
+            - ${{ steps.validate-branches.outputs.error }}
+
+            You can view all logs acessing [action log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+
   build:
     if: contains(github.event.issue.labels.*.name, 'build-homolog')
     name: Build Homolog
