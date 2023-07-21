@@ -17,6 +17,7 @@ jobs:
 
       - name: Rebase branch
         run: |
+          git fetch --all
           git checkout homolog
           lista_branches=$(cat homolog-branches)
           set +e
