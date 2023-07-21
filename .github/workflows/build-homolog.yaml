@@ -48,6 +48,7 @@ jobs:
           fetch-depth: 0
 
       - name: Atualizar branch homolog
+        id: update-homolog
         run: |
           git config --global user.email "robot@github.com"
           git config --global user.name "Homolog Robot"
@@ -62,6 +63,7 @@ jobs:
             set +e
             git ls-remote --exit-code --heads origin $branch &> /dev/null
             if [[ "$?" != "0" ]]; then
+              echo "error=Branch não existe: $branch" >> $GITHUB_OUTPUT
               echo "Branch não existe: $branch"
               set -e
               exit 1
@@ -135,5 +137,8 @@ jobs:
           comment: |
             ## Error :sob:
             Automation failed.
-            You can view the error accessing the [action log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+            Errors:
+            - ${{ needs.merge-branch.steps.update-homolog.outputs.error }}
+            ----
+            You can view all logs acessing [action log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
