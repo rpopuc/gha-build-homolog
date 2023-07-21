@@ -33,10 +33,10 @@ jobs:
 
   relatorio:
     runs-on: ubuntu-latest
+    if: failure()
     needs: [ principal ]
     steps:
       - name: Relatório final
-        if: failure()
         run: |
           echo "Ocorreram erros!"
           echo "- Por step: ${{ needs.principal.steps.tarefa.outputs.mensagem_erro }}"
