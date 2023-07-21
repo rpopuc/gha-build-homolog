@@ -44,16 +44,13 @@ def getBranches(currentList, mergeList):
 
 try:
     command = sys.argv[1]
-    currentList = sys.argv[2]
-    mergeList = sys.argv[3]
 
     if command == 'parse-branches':
-        # print('\n'.join(parseBranches(currentList)))
-        print('ok')
+        print('\n'.join(parseBranches(sys.argv[2])))
         exit()
 
     if command == 'get-branches':
-        print('\n'.join(getBranches(currentList, mergeList)))
+        print('\n'.join(getBranches(sys.argv[2], sys.argv[3])))
         exit()
 
     print('["invalid-command"]')
