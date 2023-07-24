@@ -13,4 +13,6 @@ Realiza deploy automatizado da aplicação.
 environment_1
 
 ## Branches
-_DELETE_ feat/mainha
+add_branch
+_DELETE_ delete_branch
+
