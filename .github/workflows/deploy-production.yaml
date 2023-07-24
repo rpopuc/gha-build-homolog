@@ -42,7 +42,7 @@ jobs:
       - name: Take a foto
         run: |
           git fetch --all
-          git config --global user.email "robot@example.com"
+          git config --global user.email "robot@github.com"
           git config --global user.name "Roboto"
           git checkout deploy
           version=`cat version.txt`
