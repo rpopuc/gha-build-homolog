@@ -4,4 +4,4 @@ template=`cat .github/ISSUE_TEMPLATE/deploy_homolog.md`
 template="${template/\{branch\}/$branch}"
 body=$(echo "$template" | awk '/## Description/ {p=1} p')
 
-gh issue create --title "Via create-issue: $branch" -l build-homolog -F - <<< $body
+gh issue create --title "Deploy to production" -l deploy-production -F - <<< $body
