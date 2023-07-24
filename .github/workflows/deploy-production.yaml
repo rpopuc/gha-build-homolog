@@ -35,6 +35,8 @@ jobs:
     permissions:
       contents: write
       packages: write
+    outputs:
+      history: ${{ steps.deploy.outputs.history }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -54,6 +56,10 @@ jobs:
           git add .
           git commit -m "Deploy to production"
           git push --force origin deploy
+          history=`cat history.txt`
+          echo "history<<EOF" >> $GITHUB_OUTPUT
+          echo "$history" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
@@ -110,5 +116,9 @@ jobs:
           comment: |
             ## Deploy to production successfully :rocket:
 
+            History:
+            ${{ steps.push_to_registry.outputs.history }}
+
             Your awesome application now is live and public.
+
             Enjoy!
