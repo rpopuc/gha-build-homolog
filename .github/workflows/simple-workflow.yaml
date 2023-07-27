@@ -1,8 +1,8 @@
 name: Simple workflow
 
 on:
-  # workflow_dispatch:  # Permite a ativação manual do workflow
-  workflow_call:
+  workflow_dispatch:  # Permite a ativação manual do workflow
+  # workflow_call:
     # inputs:
     #   config-path:
     #     required: true
