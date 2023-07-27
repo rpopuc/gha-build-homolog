@@ -18,7 +18,5 @@ jobs:
       #   run: |
       #     gh workflow run simple-workflow.yaml --ref develop
 
-      - name: Who you gonna call?
-        uses: ./.github/workflows/simple-worflow.yaml
-        with:
-          ref: develop
+  who-you-gonna-call:
+    uses: ./.github/workflows/simple-workflow.yaml
