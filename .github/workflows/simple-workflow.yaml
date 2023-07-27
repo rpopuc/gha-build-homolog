@@ -1,0 +1,22 @@
+name: Simple workflow
+
+on:
+  workflow_dispatch:  # Permite a ativação manual do workflow
+
+concurrency:
+  group: verify-concurrence
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: report
+        run: |
+          echo ${{ github.ref }}
+          ls -latr
+
