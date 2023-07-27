@@ -12,7 +12,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: report
-        uses: ./.github/workflows/simple-workflow
+      - name: Relatorio
+        uses: ./.github/workflows/simple-workflow.yaml@main
         with:
           ref: ${{ github.ref }}
