@@ -1,7 +1,15 @@
 name: Simple workflow
 
 on:
-  workflow_dispatch:  # Permite a ativação manual do workflow
+  # workflow_dispatch:  # Permite a ativação manual do workflow
+  workflow_call:
+    # inputs:
+    #   config-path:
+    #     required: true
+    #     type: string
+    # secrets:
+    #   token:
+    #     required: true
 
 concurrency:
   group: verify-concurrence
