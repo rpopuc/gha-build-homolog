@@ -12,8 +12,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Relatorio
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run simple-workflow.yaml --ref develop
+      # - name: Relatorio
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     gh workflow run simple-workflow.yaml --ref develop
+
+      - name: Who you gonna call?
+        uses: ./.github/workflows/simple-worflow.yaml
+        with:
+          ref: develop
