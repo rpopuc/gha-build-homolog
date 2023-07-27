@@ -1,0 +1,16 @@
+name: Delete workflows
+
+on:
+    workflow_dispatch:  # Permite a ativação manual do workflow
+
+jobs:
+    run:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deletar tudo
+          env:
+            GH_TOKEN: ${{ github.token }}
+          run: |
+            gh api repos/${{ github.repository }}/actions/runs \
+              --paginate -q '.workflow_runs[] | select(.status == "completed") | "\(.id)"' | \
+              xargs -n1 -I % gh api repos/${{ github.repository }}/actions/runs/% -X DELETE
