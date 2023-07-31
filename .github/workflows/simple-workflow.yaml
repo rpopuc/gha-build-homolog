@@ -1,15 +1,7 @@
 name: Simple workflow
 
 on:
-  workflow_dispatch:  # Permite a ativação manual do workflow
-  # workflow_call:
-    # inputs:
-    #   config-path:
-    #     required: true
-    #     type: string
-    # secrets:
-    #   token:
-    #     required: true
+  workflow_call:
 
 concurrency:
   group: verify-concurrence
@@ -26,5 +18,6 @@ jobs:
       - name: report
         run: |
           echo ${{ github.ref }}
+          cat what-the-branch
           ls -latr
 
