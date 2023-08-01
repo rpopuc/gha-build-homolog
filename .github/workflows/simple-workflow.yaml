@@ -1,8 +1,8 @@
 name: Simple workflow
 
-on:
+# on:
   # workflow_call:
-  workflow_dispatch:
+  # workflow_dispatch:
 
 concurrency:
   group: verify-concurrence
